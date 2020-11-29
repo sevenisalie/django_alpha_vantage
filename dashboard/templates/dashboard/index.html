@@ -25,7 +25,7 @@
 <!-- Page level plugin JavaScript-->
   <script src="https://cdn.datatables.net/1.10.18/js/jquery.dataTables.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.4/dist/Chart.min.js"></script>
-
+  <script src="https://cdn.plot.ly/plotly.latest.min.js"
   <script src="https://cdn.datatables.net/1.10.18/js/dataTables.bootstrap4.min.js"></script>
   <link href="https://cdn.datatables.net/1.10.18/css/dataTables.bootstrap4.min.css" rel="stylesheet">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
@@ -37,14 +37,30 @@
 {% include 'dashboard/navbar.html'%}
 
 {% block content %}
+{%load plotly_dash %}
 
 <div class='container-fluid'>
+
+
+
+
   <div class='row justify-content-center my-4'>
     <div class="col-sm-12 col-lg-12 col-xl-12 col-md-12">
       <div class="alert alert-info text-center" role="alert">
         <h1 class="display-2">{{stock}}| {{day}}</h1>
       </div>
     </div>
+
+
+    <div class="col-12 my-4">
+      <div class="card mx-auto py-3">
+        {{candlestick | safe}}
+      </div>
+      <br>
+      <br>
+    </div>
+
+
 
     <div class='col-md-6 col-lg-6 col-sm-6'>
       <div class="card mx-auto py-3" style="width: 18rem;">

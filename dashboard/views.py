@@ -3,6 +3,7 @@ from django.shortcuts import render
 #for financial data api
 import pandas as pd
 import plotly.graph_objects as go
+from plotly.offline import plot
 from alpha_vantage.techindicators import TechIndicators
 from alpha_vantage.timeseries import TimeSeries
 import datetime
@@ -12,7 +13,7 @@ import requests
 # Create your views here.
 
 def homeView(request):
-    '''
+
 
     api_key = 'YX9741BHQFXIYA0B'
 
@@ -37,19 +38,21 @@ def homeView(request):
 
 
     #plotly graph
-    figure = go.Figure(
-        data = [
-                go.Candlestick(
-                  x = ts_df.index,
-                  high = ts_df['2. high'],
-                  low = ts_df['3. low'],
-                  open = ts_df['1. open'],
-                  close = ts_df['4. close'],
-                )
-              ]
-    )
+    def candlestick():
+        figure = go.Figure(
+            data = [
+                    go.Candlestick(
+                      x = ts_df.index,
+                      high = ts_df['2. high'],
+                      low = ts_df['3. low'],
+                      open = ts_df['1. open'],
+                      close = ts_df['4. close'],
+                    )
+                  ]
+        )
 
-    #candlestick_div = plot(figure, output_type='div')
+        candlestick_div = plot(figure, output_type='div')
+        return candlestick_div
 
 
     sector = r['Sector']
@@ -96,7 +99,7 @@ def homeView(request):
         'timeseries': timeseries,
         'stock': stock,
         'day': day,
-        #'candlestick_div': candlestick_div,
+        'candlestick': candlestick(),
     }
-    '''
-    return render(request, 'dashboard/index.html', {})
+
+    return render(request, 'dashboard/index.html', context)
