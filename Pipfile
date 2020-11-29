@@ -1,0 +1,23 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+django = "*"
+alpha-vantage = "*"
+pandas = "*"
+numpy = "==1.19.3"
+plotly = "*"
+channels = "*"
+daphne = "*"
+redis = "*"
+django-redis = "*"
+channels-redis = "*"
+django-plotly-dash = "*"
+psycopg2-binary = "*"
+
+[dev-packages]
+
+[requires]
+python_version = "3.9"
