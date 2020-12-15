@@ -8,5 +8,6 @@ from dashboard.dash_apps.finished_apps import simpleexample
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', views.homeView, name="home")
+    path('', views.homeView, name="home"),
+    path('crypto/', views.cryptoView, name="crypto"),
 ]

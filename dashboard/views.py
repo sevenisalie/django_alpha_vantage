@@ -1,23 +1,16 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 
-#for financial data api
-import pandas as pd
-import plotly.graph_objects as go
-from plotly.offline import plot
-from alpha_vantage.techindicators import TechIndicators
-from alpha_vantage.timeseries import TimeSeries
-import datetime
-from pandas import Timestamp
-import requests
+#most dependencies and imports made in functions.py to avoid clutter
+from .functions import *
 
 # Create your views here.
-
+'''
 def homeView(request):
 
 
     api_key = 'YX9741BHQFXIYA0B'
 
-    stock = 'INTC'
+    stock = 'PLTR'
 
     api_key = 'YX9741BHQFXIYA0B'
     period= 60
@@ -32,7 +25,7 @@ def homeView(request):
     ti_df = data_ti
 
     #Fundamentals
-    payload = {'function': 'OVERVIEW', 'symbol': 'INTC', 'apikey': 'YX9741BHQFXIYA0B'}
+    payload = {'function': 'OVERVIEW', 'symbol': 'PLTR', 'apikey': 'YX9741BHQFXIYA0B'}
     r = requests.get('https://www.alphavantage.co/query', params=payload)
     r = r.json()
 
@@ -70,6 +63,25 @@ def homeView(request):
     for k in timeseries:
       closingprice.append(k['4. close'])
 
+    lowprice = []
+    for k in timeseries:
+      closingprice.append(k['3. low'])
+
+    highprice = []
+    for k in timeseries:
+      closingprice.append(k['2. high'])
+
+    openprice = []
+    for k in timeseries:
+      closingprice.append(k['1. open'])
+
+    pricedata = {
+        'close': [closingprice],
+        'open': [openprice],
+        'high': [highprice],
+        'low': [lowprice],
+    }
+
     #miscellaneous stuff
     day = datetime.datetime.now()
     day = day.strftime("%A")
@@ -96,10 +108,85 @@ def homeView(request):
         'yearlow': yearlow,
         'eps': eps,
         'closingprice': closingprice,
+        'openprice': openprice,
+        'highprice': highprice,
+        'lowprice': lowprice,
+        'pricedata': pricedata,
         'timeseries': timeseries,
         'stock': stock,
         'day': day,
         'candlestick': candlestick(),
     }
 
+    context={}
     return render(request, 'dashboard/index.html', context)
+    '''
+
+
+def homeView(request):
+    if request.method == 'POST':
+        symbol = request.POST.get('symbol')
+        return redirect('crypto/')
+
+    context={
+
+    }
+    return render(request, 'dashboard/index.html', context)
+
+
+
+def cryptoView(request):
+
+    if request.method == 'POST':
+        symbol = request.POST.get('symbol')
+        symbol = symbol.upper()
+    else:
+        symbol = 'BTCUSD'
+
+    data = spotquote(symbol)
+    pricedata = pricechange(symbol)
+    moredata = pricechange(symbol)
+
+
+
+    #get a fricken df
+    ts_df = candles(symbol)
+    #PlotlyGraph
+    def candlestick():
+        figure = go.Figure(
+            data = [
+                    go.Candlestick(
+                      x = ts_df.index,
+                      high = ts_df['high'],
+                      low = ts_df['low'],
+                      open = ts_df['open'],
+                      close = ts_df['close'],
+                    )
+                  ]
+        )
+
+        candlestick_div = plot(figure, output_type='div')
+        return candlestick_div
+    #endPlotlyGraph
+    percentchange = pricedata['priceChangePercent']
+    buyers = pricedata['askQty']
+    sellers = pricedata['bidQty']
+
+    eth = pricechange(symbol='ETHUSD')
+    btc = pricechange(symbol="BTCUSD")
+    ltc = pricechange(symbol="LTCUSD")
+
+
+
+    context={
+    'moredata': moredata,
+    'eth': eth,
+    'btc': btc,
+    'ltc': ltc,
+    'percentchange': percentchange,
+    'buyers': buyers,
+    'sellers': sellers,
+    'data': data,
+    'candlestick': candlestick(),
+    }
+    return render(request, 'dashboard/crypto.html', context)

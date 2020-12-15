@@ -16,6 +16,9 @@ django-redis = "*"
 channels-redis = "*"
 django-plotly-dash = "*"
 psycopg2-binary = "*"
+dj-database-url = "*"
+gunicorn = "*"
+whitenoise = "*"
 
 [dev-packages]
 

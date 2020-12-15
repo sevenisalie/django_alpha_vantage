@@ -149,7 +149,7 @@ html, body {
   box-shadow: 0  5px 10px rgba(154,160,185,0.05),
   0 15px 40px rgba(166,173,201,0.2);
   height: 100%;
-  width: 100%;
+  width: auto;
 
 }
 
@@ -201,5 +201,17 @@ html, body {
   width: 100%;
   height: auto;
   float: inherit;
+}
+
+#top-crypto .card {
+  padding: 0px;
+  margin-right: 10px;
+  border-radius: 6px;
+  border-width: 1px;
+  border-color: #6b9080;
+  box-shadow: 0  5px 10px rgba(154,160,185,0.05),
+  0 15px 40px rgba(166,173,201,0.2);
+  height: 100%;
+  width: auto;
 }
 /* { border: 1px solid black; }

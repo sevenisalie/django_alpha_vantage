@@ -12,6 +12,8 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 
 from pathlib import Path
 import os
+import psycopg2
+import dj_database_url
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -90,13 +92,17 @@ DATABASES = {
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'alpha_vantage',
-        'USER': 'postgres',
-        'PASSWORD': 'nolanryan1',
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'django_alpha_vantage',
+        'USER': 'name',
+        'PASSWORD': '',
         'HOST': 'localhost',
+        'PORT': '',
     }
 }
+
+
+
 
 # Password validation
 # https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators
@@ -160,6 +166,16 @@ PLOTLY_COMPONENTS = [
 
     'dpd_components'
 ]
+
+#HEROKU SHIT
+DATABASE_URL = os.environ['DATABASE_URL']
+db_from_env = dj_database_url.config(conn_max_age=500, sslmode=True)
+DATABASES['default'].update(db_from_env)
+
+
+
+
+
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/

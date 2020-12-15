@@ -1,0 +1,71 @@
+{% extends 'dashboard/index.html' %}
+{% load static %}
+
+{% block title %}{{data.symbol}} {{data.price}}{% endblock %}
+
+
+
+
+{% block content %}
+
+{% include 'dashboard/topcrypto.html'%}
+
+
+<div class="container-fluid">
+  <div class="row mt-5 mb-5 justify-content-center">
+
+    <div class="col-sm-3 col-md-3 col-xs-12 py-5">
+      <div class="card">
+      <div class="card-header"> Crypto Spot Quote</div>
+      <div class="card-body">
+      <form method="POST" action="">{% csrf_token %}
+        <div class="input-group mb-3">
+          <div class="input-group-append">
+            <span class="input-group-text"><i class="fas fa-user"></i></span>
+          </div>
+          <input type="text" name="symbol" placeholder="Symbol..." class="form-control">
+        </div>
+
+          <div class="card justify-content-center mt-3">
+            <input class="btn-primary btn-lg" type="submit" value="Search">
+          </div>
+      </form>
+
+      <hr>
+      {% if data %}
+      <div class="alert alert-success text-center" role="alert">
+        <span>{{data.symbol}} @ {{data.price}}</span>
+      </div>
+      {% else %}
+      <br>
+      {% endif %}
+      <hr>
+
+      <ul class="list-group">
+        <li class="list-group-item list-group-item-success">Quick Info</li>
+        <li class="list-group-item list-group-item-success">High: {{moredata.highPrice}} </li>
+        <li class="list-group-item list-group-item-success">Low: {{moredata.lowPrice}}</li>
+        <li class="list-group-item list-group-item-success">Volume: {{moredata.volume}} </li>
+      </ul>
+
+      </div>
+      </div>
+    </div>
+
+    <div class="col-sm-9 col-md-9 col-xs-12 py-5">
+      <div class="card text-center">
+        <div class="alert alert-success" role="alert">
+          <span>{{data.symbol}}</span>
+        </div>
+
+          <div>  {{candlestick | safe}} </div>
+          <br>
+          <br>
+      </div>
+    </div>
+
+
+  </div>
+</div>
+
+{%endblock%}
