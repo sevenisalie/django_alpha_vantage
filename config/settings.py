@@ -15,6 +15,7 @@ import os
 import psycopg2
 import dj_database_url
 
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -26,9 +27,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = '_&g)y$(yn2fcyjbuwzs2e9$$w$$yb0ve4(3_aa6sda#%0mae-w'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['127.0.0.1', '*']
 
 
 # Application definition
@@ -50,6 +51,7 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'django_plotly_dash.middleware.BaseMiddleware',
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -81,15 +83,16 @@ WSGI_APPLICATION = 'config.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
-'''
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
-'''
 
+
+'''
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
@@ -100,7 +103,7 @@ DATABASES = {
         'PORT': '',
     }
 }
-
+'''
 
 
 
@@ -167,23 +170,21 @@ PLOTLY_COMPONENTS = [
     'dpd_components'
 ]
 
-#HEROKU SHIT
-DATABASE_URL = os.environ['DATABASE_URL']
-db_from_env = dj_database_url.config(conn_max_age=500, sslmode=True)
-DATABASES['default'].update(db_from_env)
-
-
-
 
 
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
-
-
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATIC_URL = '/static/'
-STATICFILES_DIRS = (
-    os.path.join(BASE_DIR, 'static'),
-)
+
+STATIC_ROOT = 'config/static'
+
+STATICFILES_DIRS =[
+os.path.join(BASE_DIR, 'static')
+
+]
+
+#HEROKU SHIT
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+#django_heroku.settings(locals())
